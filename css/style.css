@@ -14692,9 +14692,12 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
     background-color: #f1f1f1
 }
 
-.card-comment img {
+.card-comment .img {
     float: left;
     width: 60px
+}
+.card-comment img {
+    max-width: 100%;
 }
 
 .card-comment .comment-desc {
