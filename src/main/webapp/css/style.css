@@ -6998,7 +6998,7 @@ table thead .border-bottom-info th, table tbody .border-bottom-info th, table tb
 }
 
 .header-navbar {
-    min-height: 56px;
+    max-height: 56px;
     padding: 0
 }
 
@@ -16520,7 +16520,6 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
 .users {
     right: 0;
     top: 103px;
-    width: 300px;
     height: 100%
 }
 
@@ -16533,7 +16532,7 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
 
 .users-main {
     height: 100%;
-    width: 300px;
+    width: 100%;
     position: fixed;
     border-radius: 0
 }
@@ -16634,7 +16633,7 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
 }
 
 .chat-menu-content .chat-cont, .chat-menu-reply .chat-cont {
-    padding: 10px
+    padding: 15px
 }
 
 .chat-menu-content .chat-time, .chat-menu-reply .chat-time {
@@ -16650,7 +16649,6 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
 .back_chatBox i, .back_friendlist i {
     float: left;
     position: absolute;
-    margin-top: 5px;
     left: 20px;
     cursor: pointer
 }
@@ -16789,7 +16787,6 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
     background-color: #fff;
     right: 0;
     display: none;
-    width: 300px;
     height: 100%;
     z-index: 99;
     border-left: 1px solid #ccc
@@ -22366,9 +22363,7 @@ span.value {
         margin-bottom: 0
     }
 
-    .common-img-bg {
-        background: #f3f3f3 !important
-    }
+
 
     .auth-body .text-center img {
         display: none

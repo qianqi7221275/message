@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>写留言-天一时代留言本</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<video autoplay></video>
+<script>
+    function hasUserMedia(){//判断是否支持调用设备api，因为浏览器不同所以判断方式不同哦
+        return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    }
+    if(hasUserMedia()){
+        //alert("浏览器支持")
+        navigator.getUserMedia = navigator.getUserMedia ||
+            navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        navigator.getUserMedia({
+            video:true,//开启视频
+            audio:true//先关闭音频，因为会有回响，以后两台电脑通信不会有响声
+        },function(stream){//将视频流交给video
+            var video=document.querySelector("video");
+            video.src=window.URL.createObjectURL(stream);
+        },function(err){
+            console.log("capturing",err)
+        });
+    }else{
+        alert("浏览器暂不支持")
+    }
+</script>
+    </body>
+</html>

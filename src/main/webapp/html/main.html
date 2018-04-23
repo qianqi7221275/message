@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>天一时代 </title>
+
+
+    <!--[if lt IE 10]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/iconfont.css">
+
+
+    <script src="../jquery-1.11.3.min.js"></script>
+    <script src="../vue.js"></script>
+</head>
+
+<body themebg-pattern="pattern1">
+
+
+
+<div id="pcoded" class="pcoded iscollapsed" nav-type="st2" theme-layout="vertical" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop" vertical-nav-type="expanded" vertical-effect="shrink" vnavigation-view="view1" fream-type="theme1" sidebar-img="false" sidebar-img-type="img1" layout-type="light">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        <nav class="navbar header-navbar pcoded-header iscollapsed" header-theme="themelight5" pcoded-header-position="fixed">
+            <div class="navbar-wrapper">
+                <div class="navbar-logo">
+                    <a @click="mainView = 'release'" class="mobile-menu" id="main-home" href="main.html">
+                        首页
+                    </a>
+                    <a @click="mainView = 'release'" class="mobile-menu" id="mobile-collapse" href="#!">
+                        发帖
+                    </a>
+                    <div class="mobile-search">
+                        <div class="header-search">
+                            <div class="main-search morphsearch-search">
+                                <div class="input-group">
+                                    <span class="input-group-addon search-close"><i class="ti-close"></i></span>
+                                    <input type="text" class="form-control" placeholder="Enter Keyword">
+                                    <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="main.html">
+                        <img class="img-fluid" style="width: 100px" src="../img/logo-2.png">
+                    </a>
+
+                    <a class="mobile-options">
+                        <i class="iconfont icon-lingdang"></i>
+                    </a>
+                </div>
+                <ul class="nav nav-tabs md-tabs " role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#home7" role="tab" aria-expanded="true"><i class="icofont icofont-home"></i>Home</a>
+                        <div class="slide"></div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#profile7" role="tab" aria-expanded="false"><i class="icofont icofont-ui-user "></i>Profile</a>
+                        <div class="slide"></div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#messages7" role="tab" aria-expanded="false"><i class="icofont icofont-ui-message"></i>Messages</a>
+                        <div class="slide"></div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#settings7" role="tab" aria-expanded="false"><i class="icofont icofont-ui-settings"></i>Settings</a>
+                        <div class="slide"></div>
+                    </li>
+                </ul>
+                <div class="navbar-container container-fluid">
+                    <ul class="nav-left">
+                        <li>
+                            <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="ti-menu"></i></a></div>
+                        </li>
+                        <li class="header-search">
+                            <div class="main-search morphsearch-search">
+                                <div class="input-group">
+                                    <span class="input-group-addon search-close"><i class="ti-close"></i></span>
+                                    <input type="text" class="form-control">
+                                    <span class="input-group-addon search-btn"><i class="ti-search"></i></span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#!" >
+                                <i class="ti-fullscreen"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav-right">
+                        <li class="header-notification">
+                            <a href="#!">
+                                <i class="iconfont icon-lingdang"></i>
+                                <span class="badge bg-c-pink"></span>
+                            </a>
+
+                        </li>
+                        <li class="" @click="loadFriends">
+                            <a href="#!" class="displayChatbox">
+                                <i class="ti-comments"></i>
+                                <span class="badge bg-c-green"></span>
+                            </a>
+                        </li>
+                        <li class="user-profile header-notification">
+                            <a href="#!">
+                                <img src="../img/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
+                                <span>John Doe</span>
+                                <i class="ti-angle-down"></i>
+                            </a>
+                            <ul class="show-notification profile-notification">
+                                <li>
+                                    <a href="#!">
+                                        <i class="ti-settings"></i> Settings
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="user-profile.html">
+                                        <i class="ti-user"></i> Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="email-inbox.html">
+                                        <i class="ti-email"></i> My Messages
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="auth-lock-screen.html">
+                                        <i class="ti-lock"></i> Lock Screen
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="auth-normal-sign-in.html">
+                                        <i class="ti-layout-sidebar-left"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+        <div class="container" style="margin-top: 56px;">
+            <div class="pcoded-wrapper">
+                <div class="pcoded-content">
+                    <div class="pcoded-inner-content">
+
+                        <div class="main-body">
+                            <div class="page-wrapper">
+
+                                <div class="page-body">
+                                    <div class="row">
+
+                                        <div v-show="pluginView == 'list'" id="sidebar" class="users p-chat-user showChat  col-lg-4 col-md-5 col-xs-12 col-sm-12" style="display: block;padding:0px;">
+                                            <div class="had-container">
+                                                <div class="card card_main p-fixed users-main">
+                                                    <div class="user-box">
+                                                        <div class="chat-search-box">
+                                                            <a class="back_friendlist">
+                                                                <i class="iconfont icon-jiantouarrowhead7"></i>
+                                                            </a>
+                                                            <div class="right-icon-control">
+                                                                <input type="text" class="form-control  search-text" placeholder="Search Friend" id="search-friends">
+                                                                <div class="form-icon">
+                                                                    <i class="iconfont icon-chazhao"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 854px;"><div class="main-friend-list" style="overflow: hidden; width: auto; height: 854px;">
+                                                            <div v-for="friend in friendList" @click="changeMessageToUser(friend)" class="media userlist-box" data-id="1" data-status="online" data-username="Josephin Doe" data-toggle="tooltip" data-placement="left" title="" data-original-title="Josephin Doe">
+                                                                <a class="media-left" href="#!">
+                                                                    <img class="media-object img-radius img-radius"  :src="getFriendImg(friend)" alt="Generic placeholder image ">
+
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <div class="f-13 chat-header">{{getFriendName(friend)}}</div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div><div class="slimScrollBar" style="background: rgb(27, 139, 249); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 854px;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-show="pluginView == 'info'" class="showChat_inner col-lg-4 col-md-5 col-xs-12 col-sm-12" style="display: block;">
+                                            <div class="media chat-inner-header">
+                                                <a class="back_chatBox">
+                                                    <i @click="pluginView = ''" class="iconfont icon-jiantouarrowhead7"></i> 爱把妹儿的鞋底
+                                                </a>
+                                            </div>
+                                            <div style="position: absolute; left: 0px; right: 0px; bottom: 120px; overflow: auto; top: 80px;">
+                                                <div  v-for="os in currentMessageList">
+
+                                                    <div class="media chat-messages" style="padding-right:30%"  v-if="os.type == 'recv'">
+                                                        <a class="media-left photo-table" href="#!">
+                                                            <img class="media-object img-radius img-radius m-t-5" src="../img/7E145ED4-AB7F-458C-AAE3-582A41C2B540.png" alt="Generic placeholder image">
+                                                        </a>
+                                                        <div class="media-body chat-menu-content">
+                                                            <div class="">
+                                                                <p class="chat-cont" style="margin-bottom: 0px;">{{os.content}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="media chat-messages" style="padding-left:30%" v-if="os.type == 'send'">
+                                                        <div class="media-body chat-menu-reply"  >
+                                                            <div class="">
+                                                                <p class="chat-cont" style="margin-bottom: 0px;">{{os.content}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-right photo-table">
+                                                            <a href="#!">
+                                                                <img class="media-object img-radius img-radius m-t-5" src="../img/avatar-4.jpg" alt="Generic placeholder image">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="chat-reply-box p-b-20">
+                                                <div class="right-icon-control">
+                                                    <input v-model="willSendMessage" type="text" class="form-control search-text" placeholder="...">
+                                                    <div class="form-icon">
+                                                        <i @click="sendMsgToUser" class="iconfont icon-fasong"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-show="mainView == 'info'" class="col-md-12 col-xl-12">
+                                            <div class="card ">
+                                                <div class="card-header ">
+                                                    <div class="card-header-left ">
+                                                        <h5>{{messageInfo.title}}</h5>
+                                                    </div>
+
+                                                </div>
+                                                <div class="card-block ">
+                                                    <div class="row">
+                                                    <div class="card-comment col-md-12 " v-for="(node,index) in messageInfo.list">
+                                                        <div class="card-block-small" style="padding-bottom:45px;">
+                                                            <img class="img-radius img" :src="node.userImage" alt="user-1">
+                                                            <div class="comment-desc">
+                                                                <p class="text-muted ">
+                                                                    {{node.content}}
+                                                                </p>
+
+                                                                <div v-for="pic in node.images" style="padding-bottom: 15px;" >
+
+                                                                    <img :src="pic" alt="">
+                                                                </div>
+
+
+
+
+                                                                <div class="date">
+                                                                    <i @click="sendMessageToUser(node.accountId)" style="font-size: 27px" class="iconfont icon-message"></i>
+                                                                    <i v-if="canDel(node.accountId)" @click="delComment(node,index)" style="font-size: 27px" class="iconfont icon-message"></i>
+                                                                    <i style="height: 29px; line-height: 29px;">{{node.date}}</i>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    </div>
+                                                    <div  class="row" style="margin-top:30px;">
+                                                        <div class="col-md-12">
+                                                            <textarea v-model="commentMsg" class="form-control col-lg-12" style="height:180px;" ></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" style="margin-top:15px;">
+                                                            <input  class="form-control" id="visibility" v-model="visibility" true-value="0" false-value="1" type="checkbox">自己可见
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" style="margin-top:15px;">
+                                                            <button @click="sendComment()" type="button" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">发表评论</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div v-show="mainView == 'release'"  class="col-md-12 col-xl-12">
+                                            <div class="card ">
+                                                <div class="card-header ">
+
+                                                    <div class="card-header-left ">
+                                                        <h5>发帖</h5>
+                                                    </div>
+
+                                                </div>
+                                                <div class="card-block ">
+
+                                                    <form class="form-horizontal">
+                                                        <div class="form-group row">
+                                                            <label for="inputEmail3" class="col-sm-2 control-label">标题</label>
+                                                            <div class="col-sm-10">
+                                                                <input  v-model="releaseInfo.title" type="text" class="form-control" id="inputEmail3" placeholder="标题">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputPassword3" class="col-sm-2 control-label">内容</label>
+                                                            <div class="col-sm-10">
+                                                                <textarea v-model="releaseInfo.content" name="" id="inputPassword3" class="form-control" cols="30"
+                                                                          rows="10"></textarea>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="inputPassword3" class="col-sm-2 control-label"></label>
+                                                            <div class="col-sm-10">
+                                                                <button @click="release"  type="button" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">发布</button>
+                                                             </div>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div v-show="mainView == 'main'" class="col-lg-12 col-md-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>天一时代</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <ul class="feed-blog">
+                                                        <li v-for="message in messageList" @click="toInfo(message)" class="active-feed">
+                                                            <div class="feed-user-img">
+                                                                <img :src="message.user_img" class="img-radius " alt="User-Profile-Image">
+                                                            </div>
+                                                            <h6><span class="label label-danger">File</span> {{message.title}} <small class="text-muted">{{message.create_date}}</small></h6>
+                                                            <p class="m-b-15 m-t-15">{{message.content}}</p>
+                                                            <div class="row">
+                                                                <div class="col-auto text-center">
+                                                                    <img src="../img/4d55b319ebc4b745ae213c68c3fc1e178a821513.jpg" alt="img" class="img-fluid img-100">
+
+                                                                </div>
+                                                                <div class="col-auto text-center">
+                                                                    <img src="../img/67a4462309f79052b5abcc4000f3d7ca7bcbd51c.jpg" alt="img" class="img-fluid img-100">
+
+                                                                </div>
+                                                                <div class="col-auto text-center">
+                                                                    <img src="../img/717adab44aed2e738b700d528b01a18b87d6fa37.jpg" alt="img" class="img-fluid img-100">
+
+                                                                </div>
+                                                            </div>
+                                                        </li>
+
+
+
+                                                        <!--<li @click="mainView = 'info'" class="diactive-feed">-->
+                                                            <!--<div class="feed-user-img">-->
+                                                                <!--<img src="../img/CDB48AD9-3C85-49A2-8F5B-3C51CC0544C1.png" class="img-radius " alt="User-Profile-Image">-->
+                                                            <!--</div>-->
+                                                            <!--<h6><span class="label label-success">Task</span>-->
+                                                                <!--摄影教程 摄影调色教程 <span class="text-c-green"> 摄影是一门艺术</span><small class="text-muted">2 hours ago</small></h6>-->
+                                                        <!--</li>-->
+                                                        <!--<li @click="mainView = 'info'" class="diactive-feed">-->
+                                                            <!--<div class="feed-user-img">-->
+                                                                <!--<img src="../img/7E145ED4-AB7F-458C-AAE3-582A41C2B540.png" class="img-radius " alt="User-Profile-Image">-->
+                                                            <!--</div>-->
+                                                            <!--<h6><span class="label label-primary">comment</span> abc posted a task: <span class="text-c-green">Design a new Homepage</span> <small class="text-muted">6 hours ago</small></h6>-->
+                                                            <!--<p class="m-b-15 m-t-15">hii <b> @everone</b> Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>-->
+                                                        <!--</li>-->
+                                                        <!--<li @click="mainView = 'info'" class="active-feed">-->
+                                                            <!--<div class="feed-user-img">-->
+                                                                <!--<img src="../img/7E145ED4-AB7F-458C-AAE3-582A41C2B540.png" class="img-radius " alt="User-Profile-Image">-->
+                                                            <!--</div>-->
+                                                            <!--<h6><span class="label label-warning">Task</span>Sarah marked : <span class="text-c-green"> do Icon Design</span><small class="text-muted">10 hours ago</small></h6>-->
+                                                        <!--</li>-->
+                                                        <!--<li @click="mainView = 'info'" class="active-feed">-->
+                                                            <!--<div class="feed-user-img">-->
+                                                                <!--<img src="../img/avatar-4.jpg" class="img-radius " alt="User-Profile-Image">-->
+                                                            <!--</div>-->
+                                                            <!--<h6><span class="label label-danger">File</span> 自学中，一起自学的小伙伴进来交流下吧！ <small class="text-muted">2 hours ago</small></h6>-->
+                                                            <!--<p class="m-b-15 m-t-15">这是几张人像 （我还有好多图，如果大家不吝赐教的话 我会持续更新让大家指导的）</p>-->
+                                                            <!--<div class="row">-->
+                                                                <!--<div class="col-auto text-center">-->
+                                                                    <!--<img src="../img/4d55b319ebc4b745ae213c68c3fc1e178a821513.jpg" alt="img" class="img-fluid img-100">-->
+
+                                                                <!--</div>-->
+                                                                <!--<div class="col-auto text-center">-->
+                                                                    <!--<img src="../img/67a4462309f79052b5abcc4000f3d7ca7bcbd51c.jpg" alt="img" class="img-fluid img-100">-->
+
+                                                                <!--</div>-->
+                                                                <!--<div class="col-auto text-center">-->
+                                                                    <!--<img src="../img/717adab44aed2e738b700d528b01a18b87d6fa37.jpg" alt="img" class="img-fluid img-100">-->
+
+                                                                <!--</div>-->
+                                                            <!--</div>-->
+                                                        <!--</li>-->
+                                                        <!--<li @click="mainView = 'info'" class="active-feed">-->
+                                                            <!--<div class="feed-user-img">-->
+                                                                <!--<img src="../img/7E145ED4-AB7F-458C-AAE3-582A41C2B540.png" class="img-radius " alt="User-Profile-Image">-->
+                                                            <!--</div>-->
+                                                            <!--<h6><span class="label label-warning">Task</span>Sarah marked : <span class="text-c-green"> do Icon Design</span><small class="text-muted">10 hours ago</small></h6>-->
+                                                        <!--</li>-->
+                                                        <!--<li @click="mainView = 'info'" class="active-feed">-->
+                                                            <!--<div class="feed-user-img">-->
+                                                                <!--<img src="../img/avatar-4.jpg" class="img-radius " alt="User-Profile-Image">-->
+                                                            <!--</div>-->
+                                                            <!--<h6><span class="label label-danger">File</span> 自学中，一起自学的小伙伴进来交流下吧！ <small class="text-muted">2 hours ago</small></h6>-->
+                                                            <!--<p class="m-b-15 m-t-15">这是几张人像 （我还有好多图，如果大家不吝赐教的话 我会持续更新让大家指导的）</p>-->
+                                                            <!--<div class="row">-->
+                                                                <!--<div class="col-auto text-center">-->
+                                                                    <!--<img src="../img/4d55b319ebc4b745ae213c68c3fc1e178a821513.jpg" alt="img" class="img-fluid img-100">-->
+
+                                                                <!--</div>-->
+                                                                <!--<div class="col-auto text-center">-->
+                                                                    <!--<img src="../img/67a4462309f79052b5abcc4000f3d7ca7bcbd51c.jpg" alt="img" class="img-fluid img-100">-->
+
+                                                                <!--</div>-->
+                                                                <!--<div class="col-auto text-center">-->
+                                                                    <!--<img src="../img/717adab44aed2e738b700d528b01a18b87d6fa37.jpg" alt="img" class="img-fluid img-100">-->
+
+                                                                <!--</div>-->
+                                                            <!--</div>-->
+                                                        <!--</li>-->
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="../main.js"></script>
+
+</body>
+
+</html>

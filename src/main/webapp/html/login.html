@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <title>登陆</title>
+
+
+    <!--[if lt IE 10]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <meta charset="utf-8">
+
+
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+
+    <script src="../vue.js"></script>
+    <script src="../jquery-1.11.3.min.js"></script>
+</head>
+<body class="fix-menu">
+
+
+
+<section id="main" class="login p-fixed d-flex text-center bg-primary common-img-bg">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="login-card card-block auth-body mr-auto ml-auto">
+                    <form class="md-float-material">
+                        <div class="auth-box">
+                            <div class="row m-b-20">
+                                <div class="col-md-12">
+                                    <img src="../img/logo.png" alt="">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="input-group">
+                                <input v-model="username" type="text" class="form-control" placeholder="请输入您的账号">
+                                <span class="md-line"></span>
+                            </div>
+                            <div class="input-group">
+                                <input v-model="pwd" type="password" class="form-control" placeholder="请输入您的密码">
+                                <span class="md-line"></span>
+                            </div>
+
+                            <div class="row m-t-30">
+                                <div class="col-md-12">
+                                    <button @click="login" type="button" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">登陆</button>
+                                </div>
+                            </div>
+                            <hr>
+
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+</body>
+
+<script>
+
+
+    var app = new Vue({
+        el:'#main',
+        data:{
+            username:'',
+            pwd:'',
+        },
+        methods:{
+            login:function () {
+                if(this.username == '' || this.username == null){
+                    alert('请输入用户名称');
+                    return;
+                }
+                if(this.pwd == '' || this.pwd == null){
+                    alert('请输入密码');
+                    return;
+                }
+                var $this = this;
+
+                $.post('../MessageAction/login.do',{
+                    dt:new Date().getTime(),
+                    username : this.username,
+                    pwd : this.pwd
+                },function(result){
+
+                    if(result.code == 200){
+                        window.location.href = 'main.html';
+                    }else{
+                        alert(result.message);
+                    }
+                });
+            }
+        }
+    });
+</script>
+</html>
