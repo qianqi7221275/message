@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.message.common.util.CommonUtil;
 import com.message.common.util.JDBCUtil;
+import com.message.common.util.Main;
 import com.message.common.util.PrintUtil;
 import jdk.nashorn.internal.scripts.JD;
 import org.apache.commons.fileupload.MultipartStream;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +30,43 @@ import java.util.*;
 public class MessageAction {
     private static Logger log = LoggerFactory.getLogger(MessageAction.class);
 
+    @RequestMapping("/logout.do")
+    public void logout(HttpServletRequest req,HttpServletResponse res){
 
+
+        req.getSession(true).removeAttribute("account");
+        PrintUtil.print(res,"清除session成功",true);
+    }
+
+    @RequestMapping("/addImgToTemp.do")
+    public void addImgToTemp(HttpServletRequest req,HttpServletResponse res){
+        String img = req.getParameter("img");
+
+        String id = CommonUtil.getAccount(req).getString("auto_id");
+        JSONArray imgs = JSONArray.parseArray(img);
+        img_cache.put(id,imgs);
+        PrintUtil.print(res,"",true);
+    }
+    @RequestMapping("/sendEmail.do")
+    public void sendEmail(HttpServletRequest req,HttpServletResponse res){
+        String id = req.getParameter("id");
+        String title = req.getParameter("title");
+        String content = req.getParameter("content");
+
+        String sql = "select email from account where auto_id=?";
+        try {
+            JSONArray query = JDBCUtil.getInstance().query(sql, new Object[]{id});
+            if(query.size() > 0){
+                String email = query.getJSONObject(0).getString("email");
+                Main.sendMessage(email,title,"天一网用户\""+CommonUtil.getAccount(req).getString("username")+"\"向您发送邮件内容为:<br>"+content);
+            }
+            PrintUtil.print(res,"发送成功",true);
+
+        } catch (SQLException e) {
+            PrintUtil.print(res,"发送失败",false);
+
+        }
+    }
 
     @RequestMapping("/updateMessageChat.do")
     public void updateMessageChat(HttpServletRequest req,HttpServletResponse res){
@@ -232,11 +270,12 @@ public class MessageAction {
 
                 return ;
             }
-            String sql = "insert into account(auto_id,username,password,img_path) values(?,?,?,?)";
+            String sql = "insert into account(auto_id,username,password,img_path,email) values(?,?,?,?,?)";
             JDBCUtil.getInstance().execute(sql,new Object[]{
                     UUID.randomUUID().toString().replace("-",""),
                     username,pwd,
-                    imgs[(int)(Math.round(Math.random()*(imgs.length - 1)))]
+                    imgs[(int)(Math.round(Math.random()*(imgs.length - 1)))],
+                    req.getParameter("email")
             });
             PrintUtil.print(res, "注册成功", true);
         } catch (SQLException e) {
@@ -250,17 +289,31 @@ public class MessageAction {
         String title = req.getParameter("title");
         String content = req.getParameter("content");
 
+        String auto_id = req.getParameter("id");
+        String update =req.getParameter("update");
+        boolean isUpdate = Boolean.parseBoolean(update);
 
-        String sql = "insert into message(auto_id,title,content,img_path,account_id,create_time) values(?,?,?,?,?,?)";
 
         try {
             String accountId = CommonUtil.getAccount(req).getString("auto_id");
             String img = StringUtils.join(img_cache.get(accountId),",");
-            JDBCUtil.getInstance().execute(sql,new Object[]{
+
+            Object[] params = new Object[]{
                     UUID.randomUUID().toString().replace("-",""),
                     title,content,img, CommonUtil.getAccount(req).getString("auto_id"),
                     new Date()
-            });
+            };
+            String sql = "insert into message(auto_id,title,content,img_path,account_id,create_time) values(?,?,?,?,?,?)";
+
+            if(isUpdate){
+                sql = "update message set title=?,content=?,img_path=? where auto_id=?";
+                params = new Object[]{
+                        title,content,img,auto_id
+                };
+            }
+
+
+            JDBCUtil.getInstance().execute(sql,params);
             img_cache.put(accountId,new JSONArray());
             PrintUtil.print(res, "发布成功", true);
         } catch (SQLException e) {

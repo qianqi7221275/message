@@ -44,6 +44,10 @@
                                 <span class="md-line"></span>
                             </div>
                             <div class="input-group">
+                                <input v-model="email" type="text" class="form-control" placeholder="请输入您的email">
+                                <span class="md-line"></span>
+                            </div>
+                            <div class="input-group">
                                 <input v-model="pwd" type="password" class="form-control" placeholder="请输入您的密码">
                                 <span class="md-line"></span>
                             </div>
@@ -86,11 +90,16 @@
             username:'',
             pwd:'',
             rpwd:'',
+            email:''
         },
         methods:{
             register:function () {
                 if(this.username == '' || this.username == null){
                     alert('请输入用户名称');
+                    return;
+                }
+                if(this.email == '' || this.email == null){
+                    alert('请输入email');
                     return;
                 }
                 if(this.pwd == '' || this.pwd == null){
@@ -106,7 +115,8 @@
                 $.post('../MessageAction/register.do',{
                     dt:new Date().getTime(),
                     username : this.username,
-                    pwd : this.pwd
+                    pwd : this.pwd,
+                    email:this.email
                 },function(result){
 
                     if(result.code == 300){

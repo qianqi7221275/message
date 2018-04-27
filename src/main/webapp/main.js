@@ -5,7 +5,10 @@ var app = new Vue({
     el:'#pcoded',
     data:{
 
-
+        emailRecver:'',
+        emailTitle:'',
+        emailContent:'',
+        lineUser:[],
         tempImg:[],
         friendList:[],
         accountCache:{
@@ -28,39 +31,51 @@ var app = new Vue({
         releaseInfo:{
             content:'',
             title:'',
+            id:'',
+            update:false,
         },
         messageList:[],
         commentMsg:'',
         messageInfo:{
-            title:'记录4月份人像摄影拍摄，已经在本贴发过一帖了，到现在好像...',
-            list:[
-                // {
-                //     content:'记录4月份人像摄影拍摄，已经在本贴发过一帖了，到现在好像慢慢沉了下去，所以只能重开一帖，以前的帖子有其它题材的拍摄，需要浏览的可以进我页面观看。本人小白，入手相机不到2个月，也是第一次比较系统的拍摄人像，包括前后期都是比较充分，大神也可以指教一下，谢谢',
-                //     images:['../img/084a20a4462309f77f02631a7e0e0cf3d7cad64e.jpg','../img/717adab44aed2e738b700d528b01a18b87d6fa37.jpg'],
-                //     date:'2018-09-09 10:22:32',
-                //     userImage:'../img/avatar-4.jpg',
-                //     icon:false
-                // },
-                // {
-                //     content:'妹子很漂亮，构图也可以但是，妹子动作不好， \n' +
-                //     '要指导摆动作啊',
-                //     userImage:'../img/avatar-4.jpg',
-                //     date:'2018-09-09 10:23:22',
-                //     icon:false
-                // },
-                // {
-                //     content:'你喋喋不休的说这么多，我都不好意思不理你。\n' +
-                //     '你可能不知道心里痒痒的那种感觉！ 关键时刻必须有料才行',
-                //     userImage:'../img/avatar-4.jpg',
-                //     date:'2018-09-09 10:23:22',
-                //     icon:false
-                // }
-            ]
+            title:'',
+            list:[]
         }
     },
     methods:{
 
+        sendEmail:function(){
+            var $this = this;
+            $.post('../MessageAction/sendEmail.do',{
+                title:this.emailTitle,
+                content:this.emailContent,
+                id:this.emailRecver
+            },function (result) {
+                if(result.code == 200){
+                    alert("发送成功");
+                    $this.emailTitle = '';
+                    $this.emailContent = '';
+                    $this.emailRecver = '';
+                    $this.pluginView = 'list';
+                }else{
+                    alert('发送失败');
+                }
+            });
+        },
+        sendEmailToFriend:function(event,id){
 
+            this.emailRecver = id;
+            this.pluginView = 'email';
+            event.stopPropagation();
+        },
+        isInLine:function(friend){
+          var id = friend.friend;
+          for(var i = 0;i<this.lineUser.length;i++){
+              if(id == this.lineUser[i]){
+                  return true;
+              }
+          }
+          return false;
+        },
         loadTempImg:function(){
             var $this = this;
           $.post('../MessageAction/loadTempFile.do',{dt:new Date().getTime()},function(result){
@@ -134,6 +149,9 @@ var app = new Vue({
             this.messageInfo.list.splice(index,1);
             $.post('../MessageAction/delComment.do',{message:index == 0,id:node.id,dt:new Date().getTime()},function(result){
                 if(result.code == 200){
+                    if(index == 0){
+                        $this.mainView = 'main';
+                    }
                     alert('删除成功');
                     $this.queryMessage();
                 }else{
@@ -177,10 +195,32 @@ var app = new Vue({
             });
         },
 
+        logout:function(){
+          $.post('../MessageAction/logout.do',{dt:new Date().getTime()},function(result){
+              window.location.href = 'login.html'
+          });
+        },
 
-        updateMessageChat:function(node){
+        updateMessageChat:function(node,index){
 
-            if(node.icon){
+            var $this = this;
+            if(!node.icon && index == 0){
+                $.post('../MessageAction/addImgToTemp.do',{
+                    dt:new Date().getTime(),
+                    img:JSON.stringify(node.images)
+                },function (result) {
+                    if(result.code == 200){
+                        $this.mainView = 'release';
+                        $this.releaseInfo.title = $this.messageInfo.title;
+                        $this.releaseInfo.content = node.content;
+                        $this.releaseInfo.id = node.id;
+                        $this.releaseInfo.update = true;
+                        $this.tempImg = node.images;
+                    }
+                });
+
+                return;
+            }else if(node.icon){
                 $.post('../MessageAction/updateMessageChat.do',{
                     dt:new Date().getTime(),content:node.content,
                     id:node.id
@@ -241,13 +281,20 @@ var app = new Vue({
         },
         release:function(){
 
-            var $this = this;
-            $.post('../MessageAction/release.do',{
+            var param = {
                 dt:new Date().getTime(),
                 title:this.releaseInfo.title,
-                content:this.releaseInfo.content
-            },function(result){
+                content:this.releaseInfo.content,
+                id:this.releaseInfo.id,
+                update:this.releaseInfo.update
+            };
+            var $this = this;
+            $.post('../MessageAction/release.do',param,function(result){
 
+                $this.releaseInfo.update = false;
+                $this.releaseInfo.title = '';
+                $this.releaseInfo.content = '';
+                $this.releaseInfo.id = '';
                 if(result.code == 200){
                     alert('发布成功');
                     $this.tempImg = [];
@@ -407,7 +454,7 @@ var app = new Vue({
 
 var socket = null;
 function createConnect(ms){
-    socket = new WebSocket('ws://127.0.0.1:8888/message');
+    socket = new WebSocket('ws://'+document.domain+':8888/message');
     socket.onopen = function(){
         socket.send(JSON.stringify({
             type:'init',
@@ -447,6 +494,8 @@ function createConnect(ms){
             app.queryHistoryChat(app.accountInfo.auto_id,id);
 
 
+        }else if(data.type == 'lineUser'){
+            app.lineUser = data.lineUser;
         }
     }
 }
