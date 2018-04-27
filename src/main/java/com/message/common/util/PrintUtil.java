@@ -26,6 +26,21 @@ public class PrintUtil {
         }
 
     }
+    public static void print(HttpServletResponse res, String msg,int code){
+        res.setCharacterEncoding("UTF-8");
+        res.setContentType("application/json");
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("code", code);
+            obj.put("message",msg);
+            res.getWriter().write(obj.toJSONString());
+            res.getWriter().flush();
+            res.getWriter().close();
+        } catch (IOException e) {
+            log.error("输出数据到web异常",e);
+        }
+
+    }
     public static void print(HttpServletResponse res, String msg,boolean status){
         res.setCharacterEncoding("UTF-8");
         res.setContentType("application/json");

@@ -6,6 +6,7 @@ var app = new Vue({
     data:{
 
 
+        tempImg:[],
         friendList:[],
         accountCache:{
         },
@@ -18,6 +19,8 @@ var app = new Vue({
         accountInfo:{
             username:'',
             auto_id:'',
+            is_admin:'',
+            img_path:'',
         },
         mainView:'main',
         pluginView:'',
@@ -58,6 +61,15 @@ var app = new Vue({
     methods:{
 
 
+        loadTempImg:function(){
+            var $this = this;
+          $.post('../MessageAction/loadTempFile.do',{dt:new Date().getTime()},function(result){
+
+              if(result.code == 200){
+                  $this.tempImg = result.list;
+              }
+          });
+        },
 
         queryHistoryChat:function(id,friend){
             var $this = this;
@@ -81,10 +93,38 @@ var app = new Vue({
         },
 
         getFriendName:function(friend){
-            return this.getAccountInfo(friend.friend).username;
+            try{
+                if(friend == undefined){
+                    return this.getAccountInfo(this.currentChatMessage.split("_")[1]).username;
+                }
+                return this.getAccountInfo(friend.friend).username;
+            }catch (e){
+                return '';
+            }
+
+        },
+        isShowChat:function(node,index,m){
+
+            if(index == 0 || this.accountInfo.is_admin == '1' ||node.visibility == '1' || m.accountId == this.accountInfo.auto_id){
+                return true;
+            }else if(node.visibility == '0'){
+
+                if(node.accountId == this.accountInfo.auto_id){
+                    return true;
+                }
+            }
+            return false;
         },
         getFriendImg:function(friend){
-            return this.getAccountInfo(friend.friend).img_path;
+            try{
+                if(friend == undefined){
+                    return this.getAccountInfo(this.currentChatMessage.split("_")[1]).img_path;
+                }
+                return this.getAccountInfo(friend.friend).img_path;
+            }catch (e){
+                return '';
+            }
+
         },
         loadFriends:function(){
           this.pluginView = 'list';
@@ -103,7 +143,9 @@ var app = new Vue({
         },
 
         canDel:function(accountId){
-            console.log(accountId);
+            if(this.accountInfo.is_admin == '1'){
+                return true;
+            }
             return accountId == this.accountInfo.auto_id;
         },
         sendComment:function(){
@@ -123,7 +165,8 @@ var app = new Vue({
                         accountId : $this.accountInfo.auto_id,
                         id:result.message,
                         comments:false,
-                        date:this.formatDate(),
+                        visibility:$this.visibility,
+                        date:$this.formatDate(),
                         images:'',
                         waitComment:'',
                         userImage:$this.accountInfo.img_path
@@ -135,6 +178,27 @@ var app = new Vue({
         },
 
 
+        updateMessageChat:function(node){
+
+            if(node.icon){
+                $.post('../MessageAction/updateMessageChat.do',{
+                    dt:new Date().getTime(),content:node.content,
+                    id:node.id
+                },function(result){
+
+                });
+            }
+            node.icon = !node.icon;
+
+        },
+
+        deleteCacheImg:function(img,index){
+            this.tempImg.splice(index,1);
+            $.post('../MessageAction/deleteImgCache.do',{dt:new Date().getTime(),img:img},function(result){
+                if(code.result == 200){
+                }
+            });
+        },
 
         toInfo:function(message){
             console.log(message);
@@ -144,6 +208,7 @@ var app = new Vue({
             this.messageInfo.list.push({
                 content:message.content,
                 icon:false,
+                visibility:message.visibility,
                 accountId : message.account_id,
                 id:message.auto_id,
                 comments:false,
@@ -156,16 +221,23 @@ var app = new Vue({
                 var m = message.comments[i];
                 this.messageInfo.list.push({
                     content:m.content,
-                    accountId : message.account_id,
+                    visibility:m.visibility,
+                    accountId : m.account_id,
                     icon:false,
                     id:m.auto_id,
                     comments:false,
                     date:this.formatDate(m.create_time),
                     images:'',
                     waitComment:'',
-                    userImage:message.user_img
+                    userImage:m.user_img
                 });
             }
+        },
+        getImg:function(imgs){
+            if(imgs.length == 0 || imgs == ''){
+                return [];
+            }
+            return imgs.split(',');
         },
         release:function(){
 
@@ -178,6 +250,7 @@ var app = new Vue({
 
                 if(result.code == 200){
                     alert('发布成功');
+                    $this.tempImg = [];
                     $this.queryMessage();
                     $this.mainView = 'main';
                 }else{
@@ -198,11 +271,14 @@ var app = new Vue({
                 content:this.willSendMessage,
 
             };
+            var $this = this;
             $.post('../MessageAction/addFriend.do',{
                 dt:new Date().getTime(),
                 self:this.accountInfo.auto_id,
                 friend:this.currentChatMessage.split("_")[1],
             },function (result) {
+
+                $this.queryFriend();
 
             });
             if(socket == null){
@@ -243,9 +319,13 @@ var app = new Vue({
         sendMessageToUser:function(id){
             this.pluginView = 'info';
             this.currentChatMessage = this.accountInfo.auto_id + '_' +id;
+            this.queryHistoryChat(this.accountInfo.auto_id,id);
 
         },
         getAccountInfo:function(id){
+            if(id == undefined){
+                return null;
+            }
             if(this.accountCache[id]){
                 return this.accountCache[id];
             }else{

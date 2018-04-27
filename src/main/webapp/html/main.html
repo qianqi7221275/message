@@ -17,23 +17,53 @@
     <link rel="stylesheet" type="text/css" href="../css/iconfont.css">
 
 
+
     <script src="../jquery-1.11.3.min.js"></script>
     <script src="../vue.js"></script>
+
+    <script src="../webuploader.js"></script>
+    <script src="../uploadFile.js"></script>
+
+    <style>
+
+
+
+        .img-view {
+            text-align: center;
+            display: inline-block;
+            font-size: 12px;
+            position: relative;
+            vertical-align: middle;
+            margin-bottom: 15px;
+            border: 1px dashed #ccc;
+            cursor: pointer;
+        }
+        .img-view:before {
+             content:"";
+             display: inline-block;
+             padding-bottom: 100%;
+             width: .1px;
+             vertical-align: middle;
+         }
+        .img-view span {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 4em;
+            color: #fff;
+        }
+
+    </style>
 </head>
 
-<body themebg-pattern="pattern1">
+<body themebg-pattern="pattern1" >
 
 
-
-<div id="pcoded" class="pcoded iscollapsed" nav-type="st2" theme-layout="vertical" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop" vertical-nav-type="expanded" vertical-effect="shrink" vnavigation-view="view1" fream-type="theme1" sidebar-img="false" sidebar-img-type="img1" layout-type="light">
+<div id="pcoded"  class="pcoded iscollapsed" nav-type="st2" theme-layout="vertical" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop" vertical-nav-type="expanded" vertical-effect="shrink" vnavigation-view="view1" fream-type="theme1" sidebar-img="false" sidebar-img-type="img1" layout-type="light">
     <div class="pcoded-overlay-box"></div>
-    <div class="pcoded-container navbar-wrapper">
+    <div style="height:100%;min-height: 100vh;" class="pcoded-container navbar-wrapper">
         <nav class="navbar header-navbar pcoded-header iscollapsed" header-theme="themelight5" pcoded-header-position="fixed">
             <div class="navbar-wrapper">
                 <div class="navbar-logo">
-                    <a @click="mainView = 'release'" class="mobile-menu" id="main-home" href="main.html">
-                        首页
-                    </a>
                     <a @click="mainView = 'release'" class="mobile-menu" id="mobile-collapse" href="#!">
                         发帖
                     </a>
@@ -56,24 +86,7 @@
                         <i class="iconfont icon-lingdang"></i>
                     </a>
                 </div>
-                <ul class="nav nav-tabs md-tabs " role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#home7" role="tab" aria-expanded="true"><i class="icofont icofont-home"></i>Home</a>
-                        <div class="slide"></div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#profile7" role="tab" aria-expanded="false"><i class="icofont icofont-ui-user "></i>Profile</a>
-                        <div class="slide"></div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#messages7" role="tab" aria-expanded="false"><i class="icofont icofont-ui-message"></i>Messages</a>
-                        <div class="slide"></div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#settings7" role="tab" aria-expanded="false"><i class="icofont icofont-ui-settings"></i>Settings</a>
-                        <div class="slide"></div>
-                    </li>
-                </ul>
+
                 <div class="navbar-container container-fluid">
                     <ul class="nav-left">
                         <li>
@@ -110,8 +123,8 @@
                         </li>
                         <li class="user-profile header-notification">
                             <a href="#!">
-                                <img src="../img/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
-                                <span>John Doe</span>
+                                <img :src="accountInfo.img_path" class="img-radius" alt="User-Profile-Image">
+                                <span>{{accountInfo.username}}</span>
                                 <i class="ti-angle-down"></i>
                             </a>
                             <ul class="show-notification profile-notification">
@@ -166,7 +179,7 @@
                                                     <div class="user-box">
                                                         <div class="chat-search-box">
                                                             <a class="back_friendlist">
-                                                                <i class="iconfont icon-jiantouarrowhead7"></i>
+                                                                <i @click="pluginView = ''" class="iconfont icon-jiantouarrowhead7"></i>
                                                             </a>
                                                             <div class="right-icon-control">
                                                                 <input type="text" class="form-control  search-text" placeholder="Search Friend" id="search-friends">
@@ -194,7 +207,7 @@
                                         <div v-show="pluginView == 'info'" class="showChat_inner col-lg-4 col-md-5 col-xs-12 col-sm-12" style="display: block;">
                                             <div class="media chat-inner-header">
                                                 <a class="back_chatBox">
-                                                    <i @click="pluginView = ''" class="iconfont icon-jiantouarrowhead7"></i> 爱把妹儿的鞋底
+                                                    <i @click="pluginView = 'list'" class="iconfont icon-jiantouarrowhead7"></i> {{getFriendName(undefined)}}
                                                 </a>
                                             </div>
                                             <div style="position: absolute; left: 0px; right: 0px; bottom: 120px; overflow: auto; top: 80px;">
@@ -202,7 +215,7 @@
 
                                                     <div class="media chat-messages" style="padding-right:30%"  v-if="os.type == 'recv'">
                                                         <a class="media-left photo-table" href="#!">
-                                                            <img class="media-object img-radius img-radius m-t-5" src="../img/7E145ED4-AB7F-458C-AAE3-582A41C2B540.png" alt="Generic placeholder image">
+                                                            <img class="media-object img-radius img-radius m-t-5" :src="getFriendImg(undefined)" alt="Generic placeholder image">
                                                         </a>
                                                         <div class="media-body chat-menu-content">
                                                             <div class="">
@@ -219,7 +232,7 @@
                                                         </div>
                                                         <div class="media-right photo-table">
                                                             <a href="#!">
-                                                                <img class="media-object img-radius img-radius m-t-5" src="../img/avatar-4.jpg" alt="Generic placeholder image">
+                                                                <img class="media-object img-radius img-radius m-t-5" :src="accountInfo.img_path" alt="Generic placeholder image">
                                                             </a>
                                                         </div>
                                                     </div>
@@ -245,11 +258,14 @@
                                                 </div>
                                                 <div class="card-block ">
                                                     <div class="row">
-                                                    <div class="card-comment col-md-12 " v-for="(node,index) in messageInfo.list">
+                                                    <div v-if="isShowChat(node,index,messageInfo.list[0])" class="card-comment col-md-12 " v-for="(node,index) in messageInfo.list">
                                                         <div class="card-block-small" style="padding-bottom:45px;">
                                                             <img class="img-radius img" :src="node.userImage" alt="user-1">
                                                             <div class="comment-desc">
-                                                                <p class="text-muted ">
+                                                                <div>
+                                                                    <textarea v-show="node.icon" v-model="node.content" class="form-control"></textarea>
+                                                                </div>
+                                                                <p v-show="!node.icon" class="text-muted ">
                                                                     {{node.content}}
                                                                 </p>
 
@@ -263,10 +279,10 @@
 
                                                                 <div class="date">
                                                                     <i @click="sendMessageToUser(node.accountId)" style="font-size: 27px" class="iconfont icon-message"></i>
-                                                                    <i v-if="canDel(node.accountId)" @click="delComment(node,index)" style="font-size: 27px" class="iconfont icon-message"></i>
+                                                                    <i v-show="node.accountId == accountInfo.auto_id" @click="updateMessageChat(node)"  style="font-size: 27px" class="iconfont " :class="{'icon-bianji1':!node.icon,'icon-baocun4':node.icon}"></i>
+                                                                    <i v-if="canDel(node.accountId)" @click="delComment(node,index)" style="font-size: 27px" class="iconfont icon-shanchu1"></i>
                                                                     <i style="height: 29px; line-height: 29px;">{{node.date}}</i>
                                                                 </div>
-
                                                             </div>
 
                                                         </div>
@@ -319,8 +335,24 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
+                                                            <label for="inputPassword3" class="col-sm-2 control-label">上传图片</label>
+                                                            <div class="col-sm-10">
+
+
+
+                                                                    <div class="col-md-3 img-view col-xs-12 col-sm-6 col-lg-3" v-for="(im,index) in tempImg" >
+                                                                        <div style="position: absolute;top: 10px; right: 10px; font-size: 15px;" @click="deleteCacheImg(im,index)">x</div>
+                                                                            <img :src="im"   alt="" style="max-width:90%;max-height:90%;">
+
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
                                                             <label for="inputPassword3" class="col-sm-2 control-label"></label>
                                                             <div class="col-sm-10">
+                                                                <button   type="button" id="file-helper" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">选择图片</button>
+
                                                                 <button @click="release"  type="button" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">发布</button>
                                                              </div>
                                                         </div>
@@ -342,20 +374,11 @@
                                                             <div class="feed-user-img">
                                                                 <img :src="message.user_img" class="img-radius " alt="User-Profile-Image">
                                                             </div>
-                                                            <h6><span class="label label-danger">File</span> {{message.title}} <small class="text-muted">{{message.create_date}}</small></h6>
+                                                            <h6>{{message.title}} <small class="text-muted">{{message.create_date}}</small></h6>
                                                             <p class="m-b-15 m-t-15">{{message.content}}</p>
                                                             <div class="row">
-                                                                <div class="col-auto text-center">
-                                                                    <img src="../img/4d55b319ebc4b745ae213c68c3fc1e178a821513.jpg" alt="img" class="img-fluid img-100">
-
-                                                                </div>
-                                                                <div class="col-auto text-center">
-                                                                    <img src="../img/67a4462309f79052b5abcc4000f3d7ca7bcbd51c.jpg" alt="img" class="img-fluid img-100">
-
-                                                                </div>
-                                                                <div class="col-auto text-center">
-                                                                    <img src="../img/717adab44aed2e738b700d528b01a18b87d6fa37.jpg" alt="img" class="img-fluid img-100">
-
+                                                                <div class="col-auto text-center" v-for="img in getImg(message.img_path)">
+                                                                    <img :src="img" alt="img" class="img-fluid img-100">
                                                                 </div>
                                                             </div>
                                                         </li>

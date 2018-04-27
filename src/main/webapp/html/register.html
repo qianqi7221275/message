@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-cn">
 <head>
-    <title>登陆</title>
+    <title>注册</title>
 
 
     <!--[if lt IE 10]>
@@ -47,15 +47,14 @@
                                 <input v-model="pwd" type="password" class="form-control" placeholder="请输入您的密码">
                                 <span class="md-line"></span>
                             </div>
-
                             <div class="input-group">
-                                <div class="col-md-12" style="text-align: right">
-                                    <a href="register.html" >没有账号?注册一个</a>
-                                </div>
+                                <input v-model="rpwd" type="password" class="form-control" placeholder="确认密码">
+                                <span class="md-line"></span>
                             </div>
+
                             <div class="row m-t-30">
                                 <div class="col-md-12">
-                                    <button @click="login" type="button" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">登陆</button>
+                                    <button @click="register" type="button" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">注册</button>
                                 </div>
                             </div>
                             <hr>
@@ -86,9 +85,10 @@
         data:{
             username:'',
             pwd:'',
+            rpwd:'',
         },
         methods:{
-            login:function () {
+            register:function () {
                 if(this.username == '' || this.username == null){
                     alert('请输入用户名称');
                     return;
@@ -97,16 +97,26 @@
                     alert('请输入密码');
                     return;
                 }
+                if(this.pwd != this.rpwd){
+                    alert('两次输入的密码不相同');
+                    return false;
+                }
                 var $this = this;
 
-                $.post('../MessageAction/login.do',{
+                $.post('../MessageAction/register.do',{
                     dt:new Date().getTime(),
                     username : this.username,
                     pwd : this.pwd
                 },function(result){
 
+                    if(result.code == 300){
+
+                        alert('当前用户名已存在!');
+                        return false;
+                    }
+
                     if(result.code == 200){
-                        window.location.href = 'main.html';
+                        window.location.href = 'login.html';
                     }else{
                         alert(result.message);
                     }
